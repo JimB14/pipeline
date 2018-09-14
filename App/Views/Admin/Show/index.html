@@ -1,0 +1,172 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Pipeline
+{% endblock %}
+
+{% block css %}
+<style>
+table  a {
+    text-decoration: underline;
+  }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="col-md-5">
+    <h3 style="margin-left:-15px;">
+      <img src="/assets/images/logo_377x307.png" height="35"
+        alt="SmileStylist Ponte Vedra Beach FL">
+      {{ pagetitle }}
+      {% if plans|length > 0 %}
+      <span class="badge" style="margin: -18px 0px 0px 7px;">
+          {{ plans|length }}
+      </span>
+      {% if year %}- for the Year {{ year }}{% else %}- {{ "now"|date("Y") }} and earlier{% endif %}
+    </h3>
+      {% endif %}
+    <!-- View <a href="/admin/all-plans">all</a>&nbsp;&nbsp;
+    View <a href="/admin/open-plans">open</a>&nbsp;&nbsp;
+    View <a href="/admin/closed-plans">closed</a> -->
+</div>
+<div  class="col-md-3 col-sm-6 col-xs-12" style="margin-top:15px;">
+  <form method="get" action="/admin/search-pipeline-by-patient">
+    <div class="input-group">
+      <input type="text" class="form-control" name="last_name"
+          placeholder="Find by last name">
+      <span class="input-group-btn">
+        <button class="btn btn-secondary btn-danger" type="submit">Go</button>
+      </span>
+    </div>
+  </form>
+</div>
+
+
+<div class="col-md-10">
+<table class="table table-bordered table-striped insert-post bg-fff"
+      style="margin-top:6px; margin-left:0px;">
+    <thead>
+        <tr style="font-size:95%;">
+            <th><i style="color: #008000;" class="fa fa-pencil fa-lg" aria-hidden="true"></i></th>
+            <th>Date</th>
+            <th>ID</th>
+            <th>Image</th>
+            <th>First</th>
+            <th>Last</th>
+            <th>Email</th>
+            <th>Treatment</th>
+            <th>Explain treatment</th>
+            <th>Presented</th>
+            <th>Accepted</th>
+            <th>Ratio</th>
+            <th>Scheduled</th>
+            <th>Pmt plan</th>
+            <th>Explain pmt</th>
+            <th>Deposit</th>
+            <!-- <th>Model release</th> -->
+            <th>Welcome sent</th>
+            <th>Follow up</th>
+            <th>Notes</th>
+            <th>Status</th>
+            <th>Change status to</th>
+            <th><i style="color: #ff0000;" class="fa fa-trash fa-2x" aria-hidden="true"></i></th>
+        </tr>
+    </thead>
+
+    <!-- <tfoot>
+        <tr>
+            <th colspan="7">Total</th>
+            <th>${{ presented_total|number_format }}</th>
+            <th>${{ accepted_total|number_format }}</th>
+            <th>{{ ratio_formatted }}%</th>
+            <th colspan="4"></th>
+            <th>${{ deposit_total|number_format }}</th>
+            <th colspan="8"></th>
+        </tr>
+    </tfoot> -->
+
+    <tbody style="font-size:95%;">
+
+        <tr>
+            <th colspan="8">Total</th>
+            <th>${{ presented_total|number_format }}</th>
+            <th>${{ accepted_total|number_format }}</th>
+            <th>{{ ratio_formatted }}%</th>
+            <th colspan="4"></th>
+            <th>${{ deposit_total|number_format }}</th>
+            <th colspan="9"></th>
+        </tr>
+
+        {% if plans %}
+        {% for data in plans %}
+        <tr>
+            <td class="text-center" style="vertical-align: middle;">
+              <a href="/admin/update-plan/{{ data.id }}" title="Edit">
+                <i style="color: #008000;" class="fa fa-pencil fa-lg" aria-hidden="true"></i>
+              </a>
+            </td>
+            <td>{{ data.date }}</td>
+            <td>{{ data.id }}</td>
+            <!--<td><?php// echo date('Y-m-d', strtotime($data['change_date'])); ?></td>--> <!-- Removes hour:minute:seconds in MySQL timestamp -->
+            <td class="text-center patient_photo">{% if data.image == '' %}<i>Need photo</i>{% else %}<img src="/assets/images/uploaded_patient_photos/{{ data.image }}" height="60">{% endif %}</td>
+            <td>{{ data.first_name }}</td>
+            <td>{{ data.last_name }}</td>
+            <!-- <td style="font-size:90%;"><a href="mailto:{{ data.email }}?subject=Dr%20Jason"><span style="background: #ddd; padding:5px 10px;">SendEmail</span></a></td> -->
+            <td style="font-size:90%;"><a href="mailto:{{ data.email }}?subject=Dr%20Jason"><button class="btn btn-default"><span style="font-size:95%;">Send email</span></button></a></td>
+            <!-- <td style="font-size:90%;"><a href="mailto:{{ data.email }}?subject=Dr%20Jason">{{ data.email }}</a></td> -->
+            <td>{{ data.treatment|title }}</td>
+            <td>{{ data.explain_other_treatment|slice(0,15) }}</td>
+            <td>${{ data.presented|number_format }}</td>
+            <td>${{ data.accepted|number_format }}</td>
+            <td>{{ data.ratio }}</td>
+            <td>{{ data.scheduled }}</td>
+            <td>{{ data.payment_plan }}</td>
+            <td>{{ data.explain_other_payment_plan|slice(0,15) }}</td>
+            <td>${{ data.deposit|number_format }}</td>
+            <!-- <td><a href="/admin/update-status/{{ data.id }}?action=model_release" title="Click to update">{% if data.model_release == 1 %} yes {% else %} no {% endif %}</a></td> -->
+            <td><a href="/admin/update-status/{{ data.id }}?action=welcome_sent" title="Click to update">{% if data.welcome_sent == 1 %} sent {% else %} no {% endif %}</a></td>
+            <td style="font-size:82%;">{{ data.follow_up|slice(0,150)|raw }}</td>
+            <td style="font-size:82%;">{{ data.notes|slice(0,150)|raw }}</td>
+            <td>
+                {% if data.status == 'open' %}
+                  <span class="red">{{ data.status }}</span>
+                {% else %}
+                  <span>{{ data.status }}</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if data.status == 'closed' %}
+                  <a href="/admin/update-plan-status/{{ data.id }}?action=open">
+                    open
+                  </a>
+                {% else %}
+                  <a href="/admin/update-plan-status/{{ data.id }}?action=closed">
+                    closed
+                  </a>
+                {% endif %}
+            </td>
+            <td class="text-center" style="vertical-align: middle;">
+              <a href="/admin/delete-plan/{{ data.id }}" title="Delete"
+                onclick="return confirm('Permanently delete this item?');">
+                <i style="color: #ff0000;" class="fa fa-trash fa-2x" aria-hidden="true"></i>
+              </a>
+            </td>
+        </tr>
+        {% endfor %}
+      {% else %}
+          <div class="alert alert-warning text-center">
+            <h4 style="margin-bottom:0px;">
+              No data
+            </h4>
+          </div>
+      {% endif %}
+    </tbody>
+
+</table>
+</div>
+{% endblock %}
+
+
+{% block bottomjs %}
+{% endblock %}

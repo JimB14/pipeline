@@ -1,0 +1,123 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Admin
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+
+{% block content %}
+<div class="col-md-12" style="border-bottom: 1px solid #eee;margin-bottom:30px;">
+    <h2 style="margin: 20px 0px 10px -15px;">
+      <img src="/assets/images/logo_377x307.png" height="35"
+        alt="SmileStylist Ponte Vedra Beach FL">
+      {{ pagetitle }}
+    </h2>
+    <!-- <hr style="margin-left:-15px;margin-bottom: 0px;"> -->
+</div>
+
+<div class="col-md-4" style="border-right:1px solid #eee; margin-left:-20px">
+    <div style="padding:20px">
+        <h3 style="margin-top:0px;">Patient</h3>
+        <form method="get" action="/admin/search-pipeline-by-patient">
+
+          <div class="form-group">
+            <label for="last_name">Patient</label>
+            <input type="text" name="last_name" id="last_name" class="form-control"
+              placeholder="Last name (from single letter to full last name)">
+          </div>
+
+          <button type="submit" class="btn btn-danger">Go</button>
+
+        </form>
+        <hr>
+
+        <h3>Status</h3>
+        <form method="get" action="/admin/search-pipeline-by-status">
+
+          <div class="form-group">
+            <label for="status">Status <span style="color:#787878;">(open, closed, both)</span></label>
+            <select class="form-control" name="status" id="status">
+                {% for choice in status %}
+                <option value="{{ choice }}">{{ choice }}</option>
+                {% endfor %}
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-danger">Go</button>
+
+        </form>
+        <hr>
+
+        <h3>Treatment</h3>
+        <form method="get" action="/admin/search-pipeline-by-treatment">
+
+          <div class="form-group">
+            <label for="treatment">Treatment <span style="color:#787878;">(full, ortho, other)</span></label>
+            <select class="form-control" name="treatment" id="treatment">
+                {% for choice in treatment %}
+                <option value="{{ choice }}">{{ choice }}</option>
+                {% endfor %}
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-danger">Go</button>
+
+        </form>
+        <hr>
+    </div>
+</div>
+
+<div class="col-md-4">
+    <div style="padding:20px">
+        <h3 style="margin-top:0px;">Date</h3>
+        <form method="get" action="/admin/search-pipeline-by-date">
+
+          <div class="form-group">
+            <label for="start_date" class="control-label">Start date</label>
+            <input type="text" class="form-control" id="start_date" name="start_date">
+          </div>
+
+          <div class="form-group">
+            <label for="end_date" class="control-label">End date</label>
+            <input type="text" class="form-control" id="end_date" name="end_date">
+          </div>
+
+          <div class="radio">
+            <label>
+              <input type="radio" name="status" id="status" value="open" checked>
+              Open
+            </label>
+          </div>
+
+          <div class="radio">
+            <label>
+              <input type="radio" name="status" id="status" value="closed">
+              Closed
+            </label>
+          </div>
+
+          <div class="radio">
+            <label>
+              <input type="radio" name="status" id="status" value="all">
+              All
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-danger">Go</button>
+
+        </form>
+        <hr>
+    </div>
+
+</div>
+{% endblock %}
+
+
+{% block bottomjs %}
+<!-- Datepicker  @https://jqueryui.com/datepicker/#default -->
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="/assets/js/datepicker.js"></script>
+{% endblock %}

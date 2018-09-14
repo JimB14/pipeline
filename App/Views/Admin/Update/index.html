@@ -1,0 +1,307 @@
+{% extends "base-admin.html" %}
+
+{% block title %}
+    Update Treatment Plan
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div class="col-md-8" style="margin-top:10px; margin-bottom: 30px;">
+  <!-- <img src="/assets/images/pipeline.jpg" id="pipeline-bg"> -->
+
+  <div style="margin-bottom: 50px;">
+      <h3 style="color: #787878;">
+          <img style="vertical-align: middle;" src="/assets/images/logo_377x307.png"
+            alt="SmileStylist logo" width="60">
+          Update patient data, review for accuracy, and click &quot;Update&quot;
+      </h3>
+  </div>
+
+
+  <form class="form-horizonal" id="pipeline" method="POST" enctype="multipart/form-data"
+    action="/admin/update-treatment-plan/{{ plan.id }}">
+
+      <div class="form-group">
+          <label for="first_name" class="col-md-2 control-label">
+            First name
+          </label>
+          <div class="col-md-10">
+              <input class="form-control" type="text" name="first_name"
+                id="first_name" placeholder="First name"
+                value="{{ plan.first_name }}" autofocus>
+          </div>
+      </div>
+
+      <div class="form-group">
+          <label for="last_name" class="col-md-2 control-label">
+            Last name
+          </label>
+          <div class="col-md-10">
+              <input class="form-control" type="text" name="last_name"
+                id="last_name" placeholder="Last name" value="{{ plan.last_name }}">
+          </div>
+      </div>
+
+      <div class="form-group">
+          <label for="email" class="col-md-2 control-label">
+            Email
+          </label>
+          <div class="col-md-10">
+              <input class="form-control" type="email" name="email"
+                id="email" placeholder="Email" value="{{ plan.email }}">
+          </div>
+      </div>
+
+      <div class="form-group">
+          <label for="patient_photo" class="col-md-2 control-label">
+            Patient photo
+          </label>
+          <div class="col-md-10">
+              <input type="file" name="patient_photo" id="patient_photo">
+              <p class="help-block small">
+                *Must be gif, jpg, jpeg or png under 5MB.
+              </p>
+          </div>
+      </div>
+
+      <div class="form-group">
+          <div class="col-md-10 col-md-offset-2">
+              {% if plan.image == '' %}
+                <p>Patient photo missing. Please upload photo.</p>
+              {% else %}
+                To replace this (active) photo, upload new photo.
+                <p>
+                    <img src="/assets/images/uploaded_patient_photos/{{ plan.image }}" width="150">
+                </p>
+                <div style="margin-bottom: 15px;">
+                    <a class="btn btn-danger btn-sm" href="/admin/delete-patient-image/{{ plan.id }}">Delete patient photo</a>
+                </div>
+              {% endif %}
+          </div>
+      </div>
+
+      <!-- <div class="form-group">
+          <label for="rating" class="col-md-2 control-label">
+            Rating
+          </label>
+          <div class="col-md-10">
+              <select class="form-control" name="rating" id="rating">
+                  <option value="{{ plan.rating }}">{{ plan.rating }}</option>
+                  {% for choice in rating_choices %}
+                  <option value="{{ choice }}">{{ choice }}</option>
+                  {% endfor %}
+              </select>
+          </div>
+        </div> -->
+
+        <!-- <div class="form-group">
+          <label for="staff" class="col-md-2 control-label">
+            Data provider
+          </label>
+          <div class="col-md-10">
+              <select class="form-control" name="staff" id="staff">
+                  <option value="{{ plan.staff }}">{{ plan.staff }}</option>
+                  {% for choice in staff_choices %}
+                  <option value="{{ choice }}">{{ choice }}</option>
+                  {% endfor %}
+              </select>
+          </div>
+        </div> -->
+
+
+        <div class="form-group">
+            <label for="treatment" class="col-md-2 control-label">Treatment</label>
+            <div class="col-md-10">
+                <select class="form-control" name="treatment" id="treatment">
+                    <option value="{{ plan.treatment }}">{{ plan.treatment|title }}</option>
+                    {% for choice in treatment_type_choices %}
+                    <option value="{{ choice }}">{{ choice }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+
+        <!-- Hidden unless "Other" selected above  -->
+        <div class="form-group" id="explain_other_treatment_hidden">
+            <label for="explain_other_treatment" class="col-md-2 control-label">
+              Describe &quot;Other&quot;
+            </label>
+            <div class="col-md-10">
+                <textarea class="form-control" name="explain_other_treatment" id="explain_other_treatment" rows="6">{{ plan.explain_other_treatment }}</textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="presented" class="col-md-2 control-label">
+              Presented
+            </label>
+            <div class="col-md-10">
+                <input type="number" class="form-control"  name="presented"
+                  id="presented" placeholder="Amount presented" value="{{ plan.presented }}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="accepted" class="col-md-2 control-label">
+              Accepted
+            </label>
+            <div class="col-md-10">
+                <input type="number" class="form-control"  name="accepted"
+                  id="accepted" placeholder="Amount accepted" value="{{ plan.accepted }}">
+            </div>
+        </div><!-- // .form-group  -->
+
+
+        <div class="form-group">
+            <label for="scheduled" class="col-md-2 control-label">Scheduled</label>
+            <div class="col-md-10">
+                <select class="form-control" name="scheduled" id="scheduled">
+                    <option value="{{ plan.scheduled }}">{{ plan.scheduled }}</option>
+                    {% for choice in scheduled_choices %}
+                    <option value="{{ choice }}">{{ choice }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- <div class="form-group"  id="pick-date">
+            <label for="datepicker" class="col-md-2 control-label">Next appt</label>
+            <div class="col-md-10">
+                <input type="text" id="datepicker"  class="form-control" name="next_appt"
+                placeholder="Date of next scheduled appointment" value="{{ plan.next_appt }}">
+            </div>
+        </div> -->
+
+        <div class="form-group">
+            <label for="payment_plan" class="col-md-2 control-label">
+              Payment plan
+            </label>
+            <div class="col-md-10">
+                <select class="form-control" name="payment_plan" id="payment_plan">
+                    <option value="{{ plan.payment_plan }}">{{ plan.payment_plan|title }}</option>
+                    {% for choice in payment_choices %}
+                    <option value="{{ choice }}">{{ choice }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Hidden unless "Other" selected above  -->
+        <div class="form-group" id="explain_other_payment_plan_hidden">
+            <label for="explain_other_payment_plan" class="col-md-2 control-label">
+              Explain &quot;Other&quot;
+            </label>
+            <div class="col-md-10">
+                <textarea class="form-control" name="explain_other_payment_plan" id="explain_other" placeholder="Describe payment arrangement" rows="6">{{ plan.explain_other_payment_plan }}</textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="deposit" class="col-md-2 control-label">
+              Deposit
+            </label>
+            <div class="col-md-10">
+                <input type="number" class="form-control"  name="deposit" id="deposit"
+                  placeholder="Amount collected (not promised)" value="{{ plan.deposit }}">
+            </div>
+        </div>
+
+        <!-- <div class="form-group">
+           <label for="signed_fa"  class="col-md-2 control-label">
+             Signed FA
+           </label>
+           <div class="col-md-10">
+               <select class="form-control" name="signed_fa" id="signed_fa">
+                   <option value="{{ plan.signed_fa }}">{{ plan.signed_fa }}</option>
+                   {% for choice in signed_fa_choices %}
+                   <option value="{{ choice }}">{{ choice }}</option>
+                   {% endfor %}
+               </select>
+           </div>
+        </div> -->
+
+       <div class="form-group">
+           <label for="notes" class="col-md-2 control-label">Notes</label>
+           <div class="col-md-10" style="margin-bottom: 20px;">
+               <textarea class="form-control" name="notes" placeholder="Notes" rows="3">{{ plan.notes }}</textarea>
+               <script>
+                  CKEDITOR.replace( 'notes' );
+                </script>
+           </div>
+       </div>
+
+       <div class="form-group">
+           <label for="follow_up" class="col-md-2 control-label">Follow up</label>
+           <div class="col-md-10" style="margin-bottom: 20px;">
+               <textarea class="form-control" name="follow_up" rows="3">{{ plan.follow_up }}</textarea>
+               <script>
+                  CKEDITOR.replace( 'follow_up' );
+                </script>
+           </div>
+       </div>
+
+       <div class="form-group">
+         <label class="control-label col-md-2">&nbsp;</label>
+           <div class="col-md-10 text-center">
+               <button type="submit" class="btn btn-danger btn-lg">
+                  Update
+                </button>
+           </div>
+       </div>
+  </form>
+{% endblock %}
+
+
+{% block bottomjs %}
+<!-- Datepicker for warranty-registration.php @https://jqueryui.com/datepicker/#default -->
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="/assets/js/datepicker.js"></script>
+<script>
+$(document).ready(function(){
+
+    $("#payment_plan").blur(function(){
+        var payment_plan = $(this).val();
+        console.log(payment_plan);
+
+        if(payment_plan == 'Other'){
+            $("#explain_other_payment_plan_hidden").fadeIn(1000);
+        } else {
+            $("#explain_other_payment_plan_hidden").fadeOut("slow");
+        }
+    });
+
+
+    $("#scheduled").blur(function(){
+        var scheduled = $(this).val();
+        console.log(scheduled);
+
+        if(scheduled === 'Yes'){
+            $("#pick-date").fadeIn(1500);
+        } else {
+            $("#pick-date").fadeOut("slow");
+        }
+    });
+
+
+    $("#treatment").blur(function(){
+        var treatment = $(this).val();
+        console.log(treatment);
+
+        if(treatment === 'Other'){
+            $("#explain_other_treatment_hidden").focus();
+            $("#explain_other_treatment_hidden").fadeIn(500);
+        } else {
+            $("#explain_other_treatment_hidden").fadeOut("slow");
+        }
+    });
+
+});
+</script>
+{% endblock %}

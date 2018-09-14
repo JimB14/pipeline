@@ -1,0 +1,125 @@
+{% extends "base-admin.html" %}
+
+{% block title %}
+    Update Treatment Plan
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div class="col-md-8" style="margin-top:10px; margin-bottom: 30px;">
+  <!-- <img src="/assets/images/pipeline.jpg" id="pipeline-bg"> -->
+
+   <div style="margin-bottom: 50px;">
+      <h2 style="color: #787878;">
+          <img style="vertical-align: middle;" src="/assets/images/logo_377x307.png"
+            alt="SmileStylist logo" width="60">
+          Update {{ collection.month }} {{ collection.year }}
+      </h2>
+   </div>
+
+   <form class="form-horizontal" method="POST" action="/admin/update-bonus-month/{{ collection.id }}">
+
+      <div class="form-group">
+         <label for="year" class="col-md-3 control-label">Year</label>
+         <div class="col-md-9">
+            <input style="background: #fff;" class="form-control" name="year"
+               type="text" value="{{ collection.year}}" readonly>
+         </div>
+      </div>
+
+      <div class="form-group">
+         <label for="month" class="col-md-3 control-label">Month</label>
+         <div class="col-md-9">
+            <input style="background: #fff;" class="form-control" name="month"
+               type="text" value="{{ collection.month}}" readonly>
+          </div>
+      </div>
+
+      <div class="form-group">
+          <label for="ohTwoMonthsAgo" class="col-md-3 control-label">
+            {{ twoMonthsAgo }} overhead
+          </label>
+          <div class="col-md-9">
+              <input class="form-control" type="number" name="ohTwoMonthsAgo"
+                id="ohTwoMonthsAgo" placeholder="Overhead two months ago"
+                value="{{ collection.ohTwoMonthsAgo }}">
+          </div>
+      </div>
+
+      <div class="form-group">
+          <label for="ohPrevMonth" class="col-md-3 control-label">
+            {{ prevMonth }} overhead
+          </label>
+          <div class="col-md-9">
+              <input class="form-control" type="number" name="ohPrevMonth"
+                id="ohPrevMonth" placeholder="Overhead last month"
+                value="{{ collection.ohPrevMonth }}">
+          </div>
+      </div>
+
+      <div class="form-group">
+          <label for="ohCurrent" class="col-md-3 control-label">
+            {{ currentMonth }} overhead
+          </label>
+          <div class="col-md-9">
+              <input class="form-control" type="number" name="ohCurrent"
+                id="ohCurrent" placeholder="Overhead this month"
+                value="{{ collection.ohCurrent }}">
+          </div>
+      </div>
+
+      <div class="form-group">
+          <label for="colTwoMonthsAgo" class="col-md-3 control-label">
+            {{ twoMonthsAgo }} collections
+          </label>
+          <div class="col-md-9">
+              <input class="form-control" type="number" name="colTwoMonthsAgo"
+                id="colTwoMonthsAgo" placeholder="Collections two months ago"
+                value="{{ collection.colTwoMonthsAgo }}">
+          </div>
+      </div>
+
+      <div class="form-group">
+          <label for="colPrevMonth" class="col-md-3 control-label">
+            {{ prevMonth }} collections
+          </label>
+          <div class="col-md-9">
+              <input class="form-control" type="number" name="colPrevMonth"
+                id="colPrevMonth" placeholder="Collections last month"
+                value="{{ collection.colPrevMonth }}">
+          </div>
+      </div>
+
+      <div class="form-group">
+          <label for="colCurrent" class="col-md-3 control-label">
+            {{ currentMonth }} collections
+          </label>
+          <div class="col-md-9">
+              <input class="form-control" type="number" name="colCurrent"
+                id="colCurrent" placeholder="Collections this month"
+                value="{{ collection.colCurrent }}">
+          </div>
+      </div>
+
+      <div class="form-group">
+         <label class="control-label col-md-3">&nbsp;</label>
+            <div class="col-md-9 text-center">
+               <button type="submit" class="btn btn-danger btn-block btn-lg">
+                  Update
+               </button>
+            </div>
+
+      </div>
+   </form>
+{% endblock %}
+
+
+{% block bottomjs %}
+
+{% endblock %}

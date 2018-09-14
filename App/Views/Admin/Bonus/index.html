@@ -1,0 +1,126 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Bonus
+{% endblock %}
+
+{% block css %}
+<style>
+table  a {
+    text-decoration: underline;
+  }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="col-md-12">
+   <h2 style="margin-left:-15px;" class="bonus-gallery">
+      <img style="opacity: 1;" src="/assets/images/logo_377x307.png" height="30"
+        alt="SmileStylist Ponte Vedra Beach FL">
+      {{ pagetitle }}*
+      <img class="img-circle fade" src="/assets/images/cooper.jpg">
+      <img class="img-circle" src="/assets/images/leo.jpg">
+      <img class="img-circle" src="/assets/images/dorie.jpg">
+      <img class="img-circle" src="/assets/images/cooper_2018_01_08.jpg">
+      <img class="img-circle" src="/assets/images/leo_2018_01_08.jpg">
+      <img class="img-circle" src="/assets/images/dorie2.jpg">
+   </h2>
+
+</div>
+
+<table id="collections" class="table table-bordered insert-post bg-fff"
+      style="margin-top:6px; margin-left:0px; width:80%;">
+   <thead>
+      <tr>
+         <th rowspan="2"><i class="fa fa-pencil" aria-hidden="true"></i></th>
+         <th rowspan="2">Year</th>
+         <th rowspan="2">Month</th>
+         <th rowspan="2">Collections<br>to earn bonus</th>
+         <th colspan="4" class="text-uppercase">Overhead</th>
+         <th colspan="4" class="text-uppercase">Collections</th>
+         <th colspan="2" class="text-uppercase">Bonus</th>
+       </tr>
+
+      <tr>
+          <th>Two<br>Mos Ago</th>
+          <th>Last<br>Month</th>
+          <th>Current<br>Month</th>
+          <th>3-month<br>Avg</th>
+          <th>Two<br>Mos Ago</th>
+          <th>Last<br>Month</th>
+          <th>Current<br>Month</th>
+          <th>3-month<br>Avg</th>
+          <th>Bonus<br>pool</th>
+          <th>Bonus<br>(5%)</th>
+       </tr>
+   </thead>
+
+   <tbody>
+      {% for collection in collections %}
+         <tr class="{{ collection.id }}">
+            <td class="text-center" style="vertical-align: middle;">
+               <a href="/admin/update/{{ collection.month }}/{{ collection.year }}" title="Edit">
+                  <i style="color: #008000;" class="fa fa-pencil" aria-hidden="true"></i>
+               </a>
+            </td>
+            <td>{{ collection.year }}</td>
+            <td>{{ collection.month }}</td>
+            <td {% if collection.month == thisMonth and collection.year == currentYear %} style="border: 3px solid #0000ff;text-align:center;" {% endif %} class="{{ collection.id}}-target">{% if collection.month == thisMonth and collection.year == currentYear and collection.target > 0 %}<span class="text-success bold">{{ collection.target|number_format }}</span>{% elseif collection.month == thisMonth and collection.year == currentYear and collection.target < 0 %}<span class="red bold">{{ collection.target|number_format }}</span>{% else %}{{ collection.target|number_format }}{% endif %}</td>
+            <td>{{ collection.ohTwoMonthsAgo|number_format }}</td>
+            <td>{{ collection.ohPrevMonth|number_format }}</td>
+            <td>{{ collection.ohCurrent|number_format }}</td>
+            <td>{{ collection.overheadAvg|number_format }}</td>
+            <td>{{ collection.colTwoMonthsAgo|number_format }}</td>
+            <td>{{ collection.colPrevMonth|number_format }}</td>
+            <td {% if collection.month == thisMonth and collection.year == currentYear %} style="border: 3px solid #0000ff;text-align:center;" {% endif %} class="{{ collection.id }}-currentCollections">{{ collection.colCurrent|number_format }}</td>
+            <td>{{ collection.collectionAvg|number_format }}</td>
+            <td>{% if collection.plusMinus <= 0 %}<span class="text-danger">Sorry, no bonus</span>{% else %}<span class="text-success bold">{{ collection.plusMinus|number_format }}</span>{% endif %}</td>
+            <td>{% if collection.plusMinus <= 0 %}<span class="text-danger">Sorry, no bonus</span>{% else %}<span class="text-success bold">${{ collection.bonus|number_format }}</span>{% endif %}</td>
+         </tr>
+      {% endfor %}
+    </tbody>
+
+</table>
+<div style="width: 75%">
+   <p>
+      *Bonus eligibility is determined based on the difference between the
+      average of the sum of collections for the last two months, plus this month,
+      and the sum of overhead for the last two months, plus this month.
+      For example, eligibility for bonus in Sep is determined by the
+      difference between the sum of Jul, Aug and Sep overhead and the sum
+      of Jul, Aug and Sep collections divided by 3 (monthly computation).
+   </p>
+   <p>
+      If collections are greater than overhead, the difference equals
+      the "bonus pool." The bonus pool is the total amount distributed as
+      "individual bonuses." (If collections <= overhead, a bonus is not
+      earned.)
+   </p>
+   <p>
+      Individual bonuses represent 5% of the bonus pool. For example, if
+      collections exceed overhead by $10,000, the bonus pool equals $10,000
+      and individual bonuses equal $500 (5% of $10,000).
+      Each employee receives an individual bonus in this amount (paid the
+      following month).
+   </p>
+</div>
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(document).ready(function(){
+   // get current month
+   var today = new Date();
+   var month = today.getMonth('m')+13; // 13 must be changed to 25 in Jan 2019; add 12 each year
+   console.log(`Month: ${month}`);
+
+
+   $("."+month).addClass('row-border backgroundWhite');
+   $("."+month+"-currentCollections").addClass('text-success bold');
+   $("."+month+"-target").addClass('bold');
+
+});
+</script>
+{% endblock %}
